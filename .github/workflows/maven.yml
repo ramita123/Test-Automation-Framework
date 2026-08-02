@@ -51,7 +51,7 @@ jobs:
             echo "env=${{ github.event.inputs.env || 'qa'}}" >> $GITHUB_OUTPUT
             
     - name: Execute Test Automation Framework
-      run: mvn clean test -Dsurefire.suiteXmlFiles=${{ steps.default.outputs.suiteXmlFiles }}  -Denv=${{ steps.default.outputs.env }} -DisLambdaTest=true -DisHeadless=true
+      run: mvn clean test -Dsurefire.suiteXmlFiles=${{ steps.default.outputs.suiteXmlFiles }}  -Denv=${{ steps.default.outputs.env }} -DisLambdaTest=true -DisHeadless=false
       
     - name: Generating Allure Report
       if: always()
