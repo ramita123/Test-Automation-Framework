@@ -1,0 +1,76 @@
+name: Test Automation Framework
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule: #set the crone for midnight ist-utc
+    - cron: "10 6 * 11 *"
+  workflow_dispatch:
+    inputs:
+      env:
+       description: "environment"
+       type: choice
+       options:
+        - qa
+        - uat
+        - dev
+       default: qa
+       required: true
+      suiteXmlFiles:
+       description: "Testing XML file."
+       type: choice
+       options:
+        - testng.xml
+        - smoke.xml
+        - regression.xml
+        - testng-datadriven.xml
+       default: testng.xml
+       required: true
+    
+        
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+        
+    - name: Default Values for execution 
+      id: default
+      run: |
+            echo "suiteXmlFiles=${{ github.event.inputs.suiteXmlFiles || 'testng.xml'}}" >> $GITHUB_OUTPUT
+            echo "env=${{ github.event.inputs.env || 'qa'}}" >> $GITHUB_OUTPUT
+            
+    - name: Execute Test Automation Framework
+      run: mvn test -Dsurefire.suiteXmlFiles=${{ steps.default.outputs.suiteXmlFiles }}  -Denv=${{ steps.default.outputs.env }}
+      
+    - name: Generating Allure Report
+      if: always()
+      run: mvn allure:report
+      
+    - name: Creating GithubPage branch 
+      if: always()
+      uses: peaceiris/actions-gh-pages@v4.0.0
+      with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          publish_dir: target/site/allure-maven-plugin
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v7.0.1
+      if: always()
+      with:
+        name: Surefire Report
+        path: target/surefire-reports
+        retention-days: 10
+        
+
+  
