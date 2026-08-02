@@ -3,6 +3,5 @@
 .project
 .settings/
 test-output/
-Screenshots/
 .allure/
 /logs/
