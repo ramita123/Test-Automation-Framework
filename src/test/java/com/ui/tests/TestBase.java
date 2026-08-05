@@ -27,9 +27,12 @@ public class TestBase {
 	@Parameters({"browser","isLambdaTest","isHeadless"})
 	@BeforeMethod(description = "load  website's home page")
 	public void setUp(@Optional ("chrome") String browser ,
-			@Optional ("false")  boolean isLambdaTest, @Optional("true") boolean isHeadless,ITestResult result) {
+			@Optional ("false")  boolean isLambdaTest, @Optional("false") boolean isHeadless,ITestResult result) {
 		
-		this.isLambda=isLambda;
+		System.out.println("Creating driver for "
+		        + result.getMethod().getMethodName());
+		
+		this.isLambda=isLambdaTest;
 		
 		
 		WebDriver lambdaDriver;
@@ -54,8 +57,10 @@ public class TestBase {
 	public void quitDriver() {
 		if(isLambda) {
 			LambdaTestUtlity.quitSession();
+			System.out.println("Closing driver");
 		}else {
-		homePage.getDriver().quit();
+		//homePage.getDriver().quit();
+		System.out.println("Closing driver");
 		}
 	}
 	

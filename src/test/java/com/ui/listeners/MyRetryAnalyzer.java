@@ -14,6 +14,10 @@ public class MyRetryAnalyzer implements IRetryAnalyzer {
 	@Override
 	public boolean retry(ITestResult result) {
 		
+		  System.out.println("Retry called for: "
+		            + result.getMethod().getMethodName()
+		            + " count=" + count);
+		
 		if(count<MAX_ATTEMPT) {
 			count++;
 			return true;

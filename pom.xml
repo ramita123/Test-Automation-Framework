@@ -91,6 +91,14 @@
     <artifactId>aspectjweaver</artifactId>
     <version>1.9.25.1</version>
 </dependency>
+<!-- Source:
+		https://mvnrepository.com/artifact/com.github.javafaker/javafaker -->
+		<dependency>
+			<groupId>com.github.javafaker</groupId>
+			<artifactId>javafaker</artifactId>
+			<version>1.0.2</version>
+			<scope>compile</scope>
+		</dependency>
 
 	</dependencies>
 
@@ -114,9 +122,9 @@
 					<suiteXmlFile>${suiteXmlFiles}</suiteXmlFile>
 				</suiteXmlFiles>
 				<systemPropertyVariables>
-				<browser>chrome</browser>
-				<isLambdaTest>false</isLambdaTest>
-				<isHeadless>true</isHeadless>
+				<browser>${browser}</browser>
+				<isLambdaTest>${isLambdaTest}</isLambdaTest>
+				<isHeadless>${isHeadless}</isHeadless>
 					<allure.results.directory>
 						${project.build.directory}/allure-results</allure.results.directory>
 				</systemPropertyVariables>
